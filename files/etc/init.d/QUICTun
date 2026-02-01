@@ -31,12 +31,12 @@ instance_parse() {
 
     write_opt "$cfg" QuicEndpoint
     write_opt "$cfg" WgListen
-    write_opt "$cfg" CertsPath
-    write_opt "$cfg" LogPath
-    write_opt "$cfg" StatPath
-    write_opt "$cfg" SNI
     write_opt "$cfg" QuicListen
     write_opt "$cfg" WgEndpoint
+    write_opt "$cfg" CertsPath
+    write_opt "$cfg" SNI
+    write_opt "$cfg" LogPath
+    write_opt "$cfg" StatPath
 
     procd_open_instance "$cfg"
     procd_set_param command "$bin"
