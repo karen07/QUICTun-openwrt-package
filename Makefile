@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/cmake.mk
 define Package/QUICTun
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl3
+  DEPENDS:=+libopenssl
   TITLE:=QUICTun
   URL:=https://github.com/karen07/QUICTun
 endef
