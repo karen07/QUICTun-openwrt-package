@@ -1,0 +1,59 @@
+# Client mode:
+#   required: QuicEndpoint + WgListen
+#
+#config instance 'client1'
+#    option enabled       '1'
+#    option QuicEndpoint  'x.x.x.x:xx'
+#    option WgListen      'x.x.x.x:xx'
+#    option CertsPath     '/etc/QUICTun/client1'
+#    option SNI           'test.example.com'
+#    option LogPath       '/tmp/QUICTun/client1.log'
+#    option StatPath      '/tmp/QUICTun/client1.stat'
+
+#config instance 'client2'
+#    option enabled       '1'
+#    option QuicEndpoint  'x.x.x.x:xx'
+#    option WgListen      'x.x.x.x:xx'
+#    option CertsPath     '/etc/QUICTun/client2'
+#    option SNI           'test.example.com'
+#    option LogPath       '/tmp/QUICTun/client2.log'
+#    option StatPath      '/tmp/QUICTun/client2.stat'
+
+# Server mode:
+#   required: QuicListen + at least one peer
+#
+#config instance 'server1'
+#    option enabled       '1'
+#    option QuicListen    'x.x.x.x:xx'
+#    option CertsPath     '/etc/QUICTun/server1'
+#    option SNI           'test.example.com'
+#    option LogPath       '/tmp/QUICTun/server1.log'
+#    option StatPath      '/tmp/QUICTun/server1.stat'
+#
+#config peer
+#    option instance          'server1'
+#    option PeerCertSHA256    'BASE64SHA256HERE1'
+#    option WgEndpoint        'x.x.x.x:xx'
+#
+#config peer
+#    option instance          'server1'
+#    option PeerCertSHA256    'BASE64SHA256HERE2'
+#    option WgEndpoint        'x.x.x.x:xx'
+
+#config instance 'server2'
+#    option enabled       '1'
+#    option QuicListen    'x.x.x.x:xx'
+#    option CertsPath     '/etc/QUICTun/server2'
+#    option SNI           'test.example.com'
+#    option LogPath       '/tmp/QUICTun/server2.log'
+#    option StatPath      '/tmp/QUICTun/server2.stat'
+#
+#config peer
+#    option instance          'server2'
+#    option PeerCertSHA256    'BASE64SHA256HERE3'
+#    option WgEndpoint        'x.x.x.x:xx'
+#
+#config peer
+#    option instance          'server2'
+#    option PeerCertSHA256    'BASE64SHA256HERE4'
+#    option WgEndpoint        'x.x.x.x:xx'
