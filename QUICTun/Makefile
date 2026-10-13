@@ -4,16 +4,19 @@ PKG_NAME:=QUICTun
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
-ifeq ("$(wildcard ../QUICTun)", "")
+# Local sources are located next to the *-openwrt-package repository.
+PKG_LOCAL_SOURCE_DIR:=$(abspath $(realpath $(CURDIR))/../../$(PKG_NAME))
+
+ifeq ($(wildcard $(PKG_LOCAL_SOURCE_DIR)/CMakeLists.txt),)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/karen07/QUICTun
 PKG_SOURCE_VERSION:=v$(PKG_VERSION)
 PKG_MIRROR_HASH:=skip
 endif
 
-PKG_MAINTAINER:=Karen Khachatryan <karen0734@gmail.com>
 PKG_LICENSE:=AGPL-3.0-or-later
 PKG_LICENSE_FILES:=LICENSE
+PKG_MAINTAINER:=Karen Khachatryan <karen0734@gmail.com>
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
@@ -34,10 +37,10 @@ define Package/QUICTun/conffiles
 /etc/config/QUICTun
 endef
 
-ifneq ("$(wildcard ../QUICTun)", "")
+ifneq ($(wildcard $(PKG_LOCAL_SOURCE_DIR)/CMakeLists.txt),)
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
-	$(CP) ../QUICTun/. $(PKG_BUILD_DIR)/
+	$(CP) $(PKG_LOCAL_SOURCE_DIR)/. $(PKG_BUILD_DIR)/
 endef
 endif
 
@@ -46,10 +49,10 @@ define Package/QUICTun/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/QUICTun $(1)/usr/bin/QUICTun
 
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) files/etc/init.d/QUICTun $(1)/etc/init.d/QUICTun
+	$(INSTALL_BIN) ./files/etc/init.d/QUICTun $(1)/etc/init.d/QUICTun
 
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_CONF) files/etc/config/QUICTun $(1)/etc/config/QUICTun
+	$(INSTALL_CONF) ./files/etc/config/QUICTun $(1)/etc/config/QUICTun
 endef
 
 $(eval $(call BuildPackage,QUICTun))
