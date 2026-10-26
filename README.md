@@ -1,20 +1,20 @@
 # QUICTun OpenWrt package
 
-This repository contains the OpenWrt package definition for [QUICTun](https://github.com/karen07/QUICTun), a WireGuard-oriented UDP tunnel with a QUIC control plane and a session-bound custom data plane.
-
-The package installs the QUICTun binary together with an OpenWrt init script and persistent UCI configuration in `/etc/config/QUICTun`. It depends on OpenSSL.
-
-For development, the Makefile can build from a sibling `../QUICTun` checkout. Otherwise OpenWrt fetches the tagged upstream source specified by `PKG_VERSION`.
+OpenWrt packaging for [QUICTun](https://github.com/karen07/QUICTun), a WireGuard-oriented
+UDP tunnel with a QUIC control plane and a session-bound custom data plane. It installs
+the daemon, init script, and UCI configuration.
 
 ## Описание
 
-Этот репозиторий содержит описание пакета OpenWrt для [QUICTun](https://github.com/karen07/QUICTun), UDP-туннеля для WireGuard с плоскостью управления QUIC и собственной плоскостью данных, привязанной к сессии.
+Пакет OpenWrt для [QUICTun](https://github.com/karen07/QUICTun), UDP-туннеля WireGuard с
+плоскостью управления QUIC и отдельной плоскостью данных, привязанной к сессии. Пакет
+устанавливает демон, init-скрипт и конфигурацию UCI.
 
-Пакет устанавливает бинарный файл QUICTun вместе со скриптом запуска OpenWrt и постоянной конфигурацией UCI `/etc/config/QUICTun`. Пакет зависит от OpenSSL.
+Конфигурация UCI хранится в `/etc/config/QUICTun`. Для работы пакета необходим OpenSSL.
 
 При разработке Makefile может собирать исходники из соседнего каталога `../QUICTun`. Если такого каталога нет, OpenWrt загружает версию исходников по тегу, заданному в `PKG_VERSION`.
 
-## Что находится в репозитории
+## Структура проекта
 
 - `QUICTun/Makefile` - описание OpenWrt package;
 - `QUICTun/files/etc/init.d/QUICTun` - init script;
