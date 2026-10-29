@@ -5,12 +5,13 @@ UDP tunnel with a QUIC control plane and a session-bound custom data plane. It i
 the daemon, init script, and UCI configuration.
 
 Пакет OpenWrt для [QUICTun](https://github.com/karen07/QUICTun), UDP-туннеля WireGuard с
-плоскостью управления QUIC и отдельной плоскостью данных, привязанной к сессии. Пакет
-устанавливает демон, init-скрипт и конфигурацию UCI.
+плоскостью управления QUIC и отдельной собственной плоскостью данных, привязанной к сессии.
+Пакет устанавливает демон, init-скрипт и конфигурацию UCI.
 
 ## Описание
 
-Конфигурация UCI хранится в `/etc/config/QUICTun`. Для работы пакета необходим OpenSSL.
+Пакет связывает конфигурацию UCI с запуском демона QUICTun через сервис OpenWrt.
+Настройки хранятся в `/etc/config/QUICTun`; для работы пакета необходим OpenSSL.
 
 При разработке Makefile может собирать исходники из соседнего каталога `../QUICTun`. Если такого каталога нет, OpenWrt загружает версию исходников по тегу, заданному в `PKG_VERSION`.
 
@@ -25,6 +26,24 @@ the daemon, init script, and UCI configuration.
 - `.github/workflows/openwrt-build.yml` - вызов переиспользуемого OpenWrt workflow.
 
 **Проверка изменений:** Изменения функциональности: исходный протокол и тесты находятся в отдельном `QUICTun`. Для упаковки проверяйте `Makefile`, `openwrt-build.env` и CI вместе; тестируйте итоговый пакет на нужной версии OpenWrt, поскольку сборка приложения сама по себе не проверяет установку и зависимости.
+
+**Выбор исходников:** `QUICTun/Makefile` копирует соседние исходники `QUICTun` при наличии их `CMakeLists.txt`, иначе получает Git-тег `v$(PKG_VERSION)`. При проверке нового релиза отличайте локальную сборку от сборки по тегу; пакет устанавливает бинарник, init-скрипт и `/etc/config/QUICTun`.
+
+**Контракт UCI и демона:** `QUICTun/files/etc/init.d/QUICTun` читает секции
+`instance` из `/etc/config/QUICTun`, пропускает экземпляры с `enabled=0`
+и создаёт временный конфиг `/tmp/QUICTun/<имя-секции>.conf` с `[Interface]`.
+Непустые опции `QuicEndpoint`, `WgListen`, `QuicListen`, `CertsPath`,
+`SNI`, `LogPath` и `StatPath` записываются в этот конфиг. Секции `peer`
+включаются как `[Peer]` только при совпадении `instance` с именем
+экземпляра и наличии одновременно `PeerCertSHA256` и `WgEndpoint`.
+После этого procd запускает `/usr/bin/QUICTun` с путём конфигурации.
+
+**Типовые изменения:** при добавлении UCI-поля синхронизируйте шаблон
+`QUICTun/files/etc/config/QUICTun`, `write_opt()` в init-скрипте и парсер
+конфигурации в основном проекте `QUICTun`. Для новых полей `peer`
+изменяйте `write_peer_section()` и серверный парсер совместно. Изменения
+имени UCI-сервиса должны затрагивать `config_load`, reload-trigger и путь
+конфигурации; сам протокол не реализован в этом репозитории.
 
 ## Сборка
 
